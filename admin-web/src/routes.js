@@ -10,7 +10,6 @@ import Products from './pages/Products';
 import Kiosk from './pages/Kiosk';
 import Reports from './pages/Reports';
 
-
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
     {...rest}

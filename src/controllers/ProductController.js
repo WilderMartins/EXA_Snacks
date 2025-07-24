@@ -1,6 +1,27 @@
+const fs = require('fs');
+const csv = require('csv-parser');
 const Product = require('../models/Product');
 
 class ProductController {
+  async bulkStore(req, res) {
+    const { file } = req;
+    const products = [];
+
+    fs.createReadStream(file.path)
+      .pipe(csv())
+      .on('data', (data) => products.push(data))
+      .on('end', async () => {
+        try {
+          await Product.bulkCreate(products, { ignoreDuplicates: true });
+          fs.promises.unlink(file.path); // Remove o arquivo temporário
+          return res.status(201).send();
+        } catch (error) {
+          console.error(error);
+          return res.status(400).json({ error: 'Failed to bulk create products.' });
+        }
+      });
+  }
+
   async store(req, res) {
     const { barcode } = req.body;
 
