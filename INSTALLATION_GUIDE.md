@@ -33,7 +33,7 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     ```bash
     # Dentro do diretório admin-web
     npm install react-router-dom
-    npm install react-qr-reader
+    npm install html5-qrcode
     # etc.
     ```
 2.  **Inicie os servidores:**
