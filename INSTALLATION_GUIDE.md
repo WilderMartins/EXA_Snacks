@@ -5,7 +5,7 @@ Este guia detalha os passos necessários para configurar e rodar o sistema de ge
 ## Pré-requisitos
 
 - Node.js (versão 14 ou superior)
-- Yarn (para gerenciamento de pacotes)
+- npm (geralmente vem com o Node.js)
 - Docker e Docker Compose (para o banco de dados PostgreSQL)
 
 ## Opção 1: Wizard de Instalação (Recomendado)
@@ -16,18 +16,18 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     ```bash
     git clone <url-do-repositorio>
     cd <nome-do-repositorio>
-    yarn install
+    npm install
     cd admin-web
-    yarn install
+    npm install
     ```
 2.  **Inicie os servidores:**
     Em dois terminais separados, inicie o backend e o frontend.
     ```bash
     # Terminal 1 (na raiz do projeto)
-    yarn dev
+    npm run dev
 
     # Terminal 2 (no diretório admin-web)
-    yarn start
+    npm start
     ```
 3.  **Acesse o Wizard:**
     Abra seu navegador e acesse `http://localhost:3000`. Você será automaticamente redirecionado para o assistente de instalação.
@@ -45,7 +45,7 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
 ```bash
 git clone <url-do-repositorio>
 cd <nome-do-repositorio>
-yarn install
+npm install
 ```
 
 #### 1.2. Configure o Banco de Dados com Docker
@@ -56,12 +56,11 @@ yarn install
 
 #### 1.4. Rode as Migrações
 ```bash
-yarn sequelize-cli db:migrate
+npx sequelize-cli db:migrate
 ```
-(Nota: `yarn sequelize-cli` funciona se você tiver o `sequelize-cli` como uma dependência de desenvolvimento)
 
 ### 2. Configuração do Frontend
 ```bash
 cd admin-web
-yarn install
+npm install
 ```
