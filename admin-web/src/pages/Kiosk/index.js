@@ -5,13 +5,60 @@ import './styles.css';
 
 export default function Kiosk() {
   const [credits, setCredits] = useState(0);
-  const [consumptions, setConsumptions] = useState([]);
+  const [, setConsumptions] = useState([]); // Apenas o setter é usado para o histórico
   const [lastConsumed, setLastConsumed] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [manualBarcode, setManualBarcode] = useState('');
+  const processConsumption = useCallback(async (barcode) => {
+    if (!barcode || isPaused) return;
+
+    setIsPaused(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.post(
+        '/consumptions',
+        { barcode },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setLastConsumed({ product: response.data.product, status: 'success' });
+      loadData();
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'Erro desconhecido';
+      setLastConsumed({ product: { name: errorMessage }, status: 'error' });
+    } finally {
+      setTimeout(() => {
+        setLastConsumed(null);
+        setIsPaused(false);
+      }, 3000);
+    }
+  }, [isPaused, loadData]);
 
   const loadData = useCallback(async () => {
-    // ... (mesma função loadData)
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!token || !user) {
+      return;
+    }
+
+    try {
+      const consumptionsResponse = await api.get(`/consumptions?user_id=${user.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const userResponse = await api.get(`/users/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const today = new Date().toISOString().split('T')[0];
+      const todayConsumptions = consumptionsResponse.data.filter(c => c.created_at.startsWith(today));
+
+      setCredits(userResponse.data.daily_credits - todayConsumptions.length);
+      setConsumptions(todayConsumptions);
+    } catch (error) {
+      console.error('Failed to load data', error);
+    }
+
   }, []);
 
   const processConsumption = useCallback(async (barcode) => {
