@@ -18,9 +18,13 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      password_hash: {
+      otp: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
+      },
+      otp_expires_at: {
+        type: Sequelize.DATE,
+        allowNull: true,
       },
       daily_credits: {
         type: Sequelize.INTEGER,

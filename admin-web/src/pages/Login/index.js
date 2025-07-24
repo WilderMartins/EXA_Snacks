@@ -1,43 +1,60 @@
 import React, { useState } from 'react';
 import api from '../../services/api';
+import { login } from '../../services/auth';
 
-export default function Login() {
+export default function Login({ history }) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [step, setStep] = useState(1);
 
-  async function handleSubmit(event) {
+  async function handleEmailSubmit(event) {
     event.preventDefault();
-
     try {
-      const response = await api.post('/sessions', { email, password });
-      const { token, user } = response.data;
-
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user));
-
-      // Redirect to dashboard
+      await api.post('/sessions/otp', { email });
+      setStep(2);
     } catch (error) {
-      alert('Falha no login, tente novamente.');
+      alert('Falha ao solicitar OTP, verifique o e-mail e tente novamente.');
+    }
+  }
+
+  async function handleOtpSubmit(event) {
+    event.preventDefault();
+    try {
+      const response = await api.post('/sessions', { email, otp });
+      const { token, user } = response.data;
+      login(token, user);
+      history.push('/kiosk');
+    } catch (error) {
+      alert('Falha no login, OTP inválido ou expirado.');
     }
   }
 
   return (
     <div className="login-container">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Seu e-mail"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Sua senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit">Entrar</button>
-      </form>
+      {step === 1 ? (
+        <form onSubmit={handleEmailSubmit}>
+          <h2>Acesse o quiosque</h2>
+          <input
+            type="email"
+            placeholder="Seu e-mail"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <button type="submit">Receber código</button>
+        </form>
+      ) : (
+        <form onSubmit={handleOtpSubmit}>
+          <h2>Digite o código</h2>
+          <p>Enviamos um código para {email}</p>
+          <input
+            type="text"
+            placeholder="Seu código"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
+          <button type="submit">Entrar</button>
+        </form>
+      )}
     </div>
   );
 }

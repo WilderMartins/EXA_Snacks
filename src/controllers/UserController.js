@@ -14,15 +14,8 @@ class UserController {
   }
 
   async update(req, res) {
-    const { email } = req.body;
-
-    const user = await User.findByPk(req.userId);
-
-    if (email !== user.email) {
-      if (await User.findOne({ where: { email } })) {
-        return res.status(400).json({ error: 'User already exists' });
-      }
-    }
+    const { id } = req.params;
+    const user = await User.findByPk(id);
 
     const updatedUser = await user.update(req.body);
 
