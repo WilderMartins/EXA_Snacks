@@ -1,10 +1,11 @@
-const { Op } = require('sequelize');
+const { Op, fn, col, literal } = require('sequelize');
 const { startOfDay, endOfDay, parseISO } = require('date-fns');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Consumption = require('../models/Consumption');
 
 class ConsumptionController {
+  // ... (método store permanece o mesmo)
   async store(req, res) {
     const { barcode } = req.body;
     const userId = req.userId;
@@ -44,6 +45,8 @@ class ConsumptionController {
     return res.json(consumptionWithProduct);
   }
 
+  // ... (método index permanece o mesmo)
+
   async index(req, res) {
     const { user_id, start_date, end_date } = req.query;
 
@@ -72,13 +75,36 @@ class ConsumptionController {
   }
 
   async summaryByUser(req, res) {
-    // Implementação futura
-    return res.json([]);
+    const summary = await Consumption.findAll({
+      attributes: [
+        [fn('COUNT', col('user.id')), 'total_consumed'],
+      ],
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['id', 'name'],
+      }],
+      group: ['user.id', 'user.name'],
+      order: [[literal('total_consumed'), 'DESC']],
+      limit: 10,
+    });
+    return res.json(summary);
   }
 
   async summaryByProduct(req, res) {
-    // Implementação futura
-    return res.json([]);
+    const summary = await Consumption.findAll({
+      attributes: [
+        [fn('COUNT', col('product.id')), 'total_consumed'],
+      ],
+      include: [{
+        model: Product,
+        as: 'product',
+        attributes: ['id', 'name'],
+      }],
+      group: ['product.id', 'product.name'],
+      order: [[literal('total_consumed'), 'DESC']],
+    });
+    return res.json(summary);
   }
 }
 
