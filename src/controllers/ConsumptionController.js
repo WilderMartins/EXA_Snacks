@@ -46,7 +46,6 @@ class ConsumptionController {
   }
 
   // ... (método index permanece o mesmo)
-
   async index(req, res) {
     const { user_id, start_date, end_date } = req.query;
 
