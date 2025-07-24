@@ -61,25 +61,6 @@ export default function Kiosk() {
 
   }, []);
 
-  const processConsumption = useCallback(async (barcode) => {
-    if (!barcode || isPaused) return;
-    setIsPaused(true);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await api.post('/consumptions', { barcode }, { headers: { Authorization: `Bearer ${token}` } });
-      setLastConsumed({ product: response.data.product, status: 'success' });
-      loadData();
-    } catch (error) {
-      const errorMessage = error.response?.data?.error || 'Erro desconhecido';
-      setLastConsumed({ product: { name: errorMessage }, status: 'error' });
-    } finally {
-      setTimeout(() => {
-        setLastConsumed(null);
-        setIsPaused(false);
-      }, 3000);
-    }
-  }, [isPaused, loadData]);
-
   useEffect(() => {
     loadData();
 
