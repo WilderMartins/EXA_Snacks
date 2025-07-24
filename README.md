@@ -28,7 +28,7 @@ Este é um sistema completo para gerenciar o consumo de snacks e bebidas por col
 
 ## Instalação
 
-Para instruções detalhadas sobre como configurar e rodar o projeto em um ambiente de desenvolvimento, consulte o [Guia de Instalação](INSTALLATION_GUIDE.md).
+A instalação do sistema é simplificada através de um **assistente de instalação via navegador**. Para instruções detalhadas, consulte o [Guia de Instalação](INSTALLATION_GUIDE.md).
 
 ## Documentação da API
 

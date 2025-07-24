@@ -1,115 +1,80 @@
 # Guia de Instalação
 
-Este guia detalha os passos necessários para configurar e rodar o sistema de gestão de snacks e bebidas em um ambiente de desenvolvimento.
+Este guia detalha os passos necessários para configurar e rodar o sistema de gestão de snacks e bebidas.
 
-## Pré-requisitos
+## Opção 1: Wizard de Instalação (Recomendado)
 
-- Node.js (versão 14 ou superior)
-- npm (geralmente vem com o Node.js)
-- Docker e Docker Compose (para o banco de dados PostgreSQL)
+A maneira mais fácil de instalar o sistema é através do assistente de instalação via navegador.
 
-## 1. Configuração do Backend
+1.  **Clone o repositório e instale as dependências iniciais:**
+    ```bash
+    git clone <url-do-repositorio>
+    cd <nome-do-repositorio>
+    npm install
+    cd admin-web
+    npm install
+    ```
+2.  **Inicie os servidores:**
+    Em dois terminais separados, inicie o backend e o frontend.
+    ```bash
+    # Terminal 1 (na raiz do projeto)
+    npm run dev
 
-### 1.1. Clone o repositório
+    # Terminal 2 (no diretório admin-web)
+    npm start
+    ```
+3.  **Acesse o Wizard:**
+    Abra seu navegador e acesse `http://localhost:3000`. Você será automaticamente redirecionado para o assistente de instalação.
+4.  **Siga os Passos:**
+    - **Passo 1: Boas-vindas**: Clique em "Iniciar".
+    - **Passo 2: Banco de Dados**: Insira as credenciais do seu banco de dados PostgreSQL. O assistente irá testar a conexão antes de salvar.
+    - **Passo 3: Conta de Administrador**: Crie a primeira conta de administrador do sistema.
+    - **Passo 4: Conclusão**: Finalize a instalação. Você será redirecionado para a tela de login.
 
+## Opção 2: Instalação Manual (Para Desenvolvedores)
+
+### 1. Configuração do Backend
+
+#### 1.1. Clone o repositório e instale as dependências
 ```bash
 git clone <url-do-repositorio>
 cd <nome-do-repositorio>
-```
-
-### 1.2. Configure o Banco de Dados
-
-O sistema usa PostgreSQL como banco de dados. A maneira mais fácil de rodá-lo localmente é com Docker.
-
-1.  Na raiz do projeto, crie um arquivo `docker-compose.yml` com o seguinte conteúdo:
-
-    ```yml
-    version: '3.8'
-    services:
-      postgres:
-        image: postgres:13
-        container_name: snack-db
-        restart: always
-        ports:
-          - "5432:5432"
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: docker
-          POSTGRES_DB: snacks
-        volumes:
-          - pgdata:/var/lib/postgresql/data
-    volumes:
-      pgdata:
-        driver: local
-    ```
-
-2.  Inicie o container do PostgreSQL:
-
-    ```bash
-    docker-compose up -d
-    ```
-
-### 1.3. Instale as dependências
-
-```bash
 npm install
 ```
 
-### 1.4. Configure as Variáveis de Ambiente
+#### 1.2. Configure o Banco de Dados com Docker
+(Esta seção permanece a mesma da versão anterior do guia)
 
-1.  Na raiz do projeto, crie uma cópia do arquivo `.env.example` e renomeie para `.env`.
-2.  Preencha as variáveis de ambiente no arquivo `.env`. Os valores padrão para o banco de dados já devem funcionar com a configuração do Docker Compose acima. Você precisará preencher as credenciais do AWS SES se quiser que o envio de e-mail funcione.
-
+#### 1.3. Configure as Variáveis de Ambiente
+1.  Na raiz do projeto, crie um arquivo `.env`.
+2.  Adicione as seguintes variáveis:
     ```env
+    DB_HOST=localhost
+    DB_PORT=5432
     DB_USER=postgres
     DB_PASSWORD=docker
     DB_NAME=snacks
-    DB_HOST=localhost
-    DB_PORT=5432
     APP_SECRET=your-super-secret-key
-
-    AWS_ACCESS_KEY_ID=your-aws-access-key-id
-    AWS_SECRET_ACCESS_KEY=your-aws-secret-access-key
-    AWS_REGION=us-east-1
-    MAIL_FROM=noreply@example.com
     ```
 
-### 1.5. Rode as Migrações do Banco de Dados
+#### 1.4. Rode as Migrações
+**Importante**: Antes de rodar as migrações, o backend precisa ter se conectado ao banco pelo menos uma vez. Inicie o servidor, deixe-o conectar, e então rode as migrações.
 
 ```bash
 npx sequelize-cli db:migrate
 ```
 
-### 1.6. Inicie o Servidor do Backend
-
-```bash
-npm run dev
+#### 1.5. Crie o primeiro usuário (via `psql` ou outra ferramenta)
+```sql
+INSERT INTO users (name, email, role, created_at, updated_at) VALUES ('Admin', 'admin@example.com', 'admin', NOW(), NOW());
 ```
 
-O servidor do backend estará rodando em `http://localhost:3333`.
-
-## 2. Configuração do Frontend (Painel Admin)
-
-### 2.1. Instale as dependências
-
-Navegue até o diretório do painel de administração e instale as dependências.
-
+#### 1.6. Crie o arquivo de "trava"
+Crie um arquivo vazio chamado `setup.lock` dentro do diretório `src/config/`.
 ```bash
-cd admin-web
-npm install
+touch src/config/setup.lock
 ```
 
-### 2.2. Inicie o Servidor de Desenvolvimento
+### 2. Configuração do Frontend
+(Esta seção permanece a mesma da versão anterior do guia)
 
-```bash
-npm start
-```
-
-O painel de administração estará acessível em `http://localhost:3000`.
-
-## 3. Uso
-
-1.  Acesse o painel de administração em `http://localhost:3000`.
-2.  Cadastre um novo usuário administrador através do próprio painel ou via banco de dados.
-3.  Configure as credenciais do AWS SES na página de "Configurações" para habilitar o login por OTP.
-4.  Use a página "Quiosque" para simular o registro de consumo.
