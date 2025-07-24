@@ -20,7 +20,8 @@
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.28.0",
-    "aws-sdk": "^2.1253.0"
+    "aws-sdk": "^2.1253.0",
+    "node-cron": "^3.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.20",
