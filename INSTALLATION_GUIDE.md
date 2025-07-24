@@ -59,6 +59,7 @@ npm install
 
 #### 1.4. Rode as Migrações
 **Importante**: Antes de rodar as migrações, o backend precisa ter se conectado ao banco pelo menos uma vez. Inicie o servidor, deixe-o conectar, e então rode as migrações.
+
 ```bash
 npx sequelize-cli db:migrate
 ```
@@ -76,3 +77,4 @@ touch src/config/setup.lock
 
 ### 2. Configuração do Frontend
 (Esta seção permanece a mesma da versão anterior do guia)
+
