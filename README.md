@@ -1,1 +1,42 @@
-# EXA_Snacks
+# Sistema de Gestão de Snacks e Bebidas
+
+Este é um sistema completo para gerenciar o consumo de snacks e bebidas por colaboradores de uma empresa. O sistema possui um painel de administração web e uma interface de quiosque otimizada para tablets.
+
+## Funcionalidades
+
+- **Autenticação Segura**: Login sem senha utilizando OTP (One-Time Password) enviado por e-mail.
+- **Painel de Administração Web**:
+    - Gestão de usuários (colaboradores).
+    - Gestão de produtos (snacks, bebidas, etc.).
+    - Configuração de serviços externos (AWS SES para envio de e-mails).
+    - Relatórios de consumo detalhados com opção de exportação para CSV.
+- **Interface de Quiosque**:
+    - Otimizada para tablets e uso de baixa fricção.
+    - Escaneamento de código de barras de produtos usando a câmera do dispositivo.
+    - Registro de consumo automático com feedback visual instantâneo.
+    - Exibição em tempo real do saldo de créditos diários e do histórico de consumo.
+- **Backend Robusto**:
+    - API RESTful segura para comunicação entre o frontend e o banco de dados.
+    - Lógica de negócio para controle de limite de consumo diário.
+
+## Tecnologias Utilizadas
+
+- **Backend**: Node.js, Express, Sequelize, PostgreSQL
+- **Frontend**: React, Material-UI (conceitualmente), CSS puro
+- **Banco de Dados**: PostgreSQL (com suporte para Docker)
+- **Envio de E-mail**: AWS SES
+
+## Instalação
+
+A instalação do sistema é simplificada através de um **assistente de instalação via navegador**. Para instruções detalhadas, consulte o [Guia de Instalação](INSTALLATION_GUIDE.md).
+
+## Documentação da API
+
+Para detalhes sobre os endpoints da API, consulte a [Documentação da API](API_DOCUMENTATION.md).
+
+## Próximos Passos
+
+- [ ] Implementar o reset diário de créditos no backend.
+- [ ] Adicionar gráficos e mais filtros aos relatórios.
+- [ ] Desenvolver um aplicativo nativo para Android/iOS.
+- [ ] Escrever testes automatizados (unitários e de integração).
