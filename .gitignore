@@ -17,4 +17,3 @@ lerna-debug.log*
 .DS_Store
 .env
 /coverage
-yarn.lock
