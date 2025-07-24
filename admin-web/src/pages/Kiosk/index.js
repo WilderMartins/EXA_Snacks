@@ -10,6 +10,39 @@ export default function Kiosk() {
   const [isPaused, setIsPaused] = useState(false);
   const [manualBarcode, setManualBarcode] = useState('');
 
+  const loadData = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (!token || !user) {
+      // Idealmente, redirecionar para o login
+      return;
+    }
+
+    try {
+      const consumptionsResponse = await api.get(`/consumptions?user_id=${user.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const userResponse = await api.get(`/users/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Filtra consumos para apenas hoje
+      const today = new Date().toISOString().split('T')[0];
+      const todayConsumptions = consumptionsResponse.data.filter(c => c.created_at.startsWith(today));
+
+      setCredits(userResponse.data.daily_credits - todayConsumptions.length);
+      setConsumptions(todayConsumptions);
+    } catch (error) {
+      console.error('Failed to load data', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   const processConsumption = useCallback(async (barcode) => {
     if (!barcode || isPaused) return;
 
@@ -34,14 +67,6 @@ export default function Kiosk() {
     }
   }, [isPaused, loadData]);
 
-  const loadData = useCallback(async () => {
-    // ... (mesma função loadData)
-  }, []);
-
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
   const handleManualSubmit = (event) => {
     event.preventDefault();
     processConsumption(manualBarcode);
@@ -57,9 +82,15 @@ export default function Kiosk() {
 
       <div className="scanner-container">
         {!isPaused && <QrReader
-          onResult={(result) => processConsumption(result?.text)}
+          onResult={(result, error) => {
+            if (!!result) {
+              processConsumption(result?.text);
+            }
+            if (!!error) {
+              // console.info(error);
+            }
+          }}
           constraints={{ facingMode: 'environment' }}
-          containerStyle={{ width: '100%' }}
         />}
 
         {lastConsumed && (
@@ -86,7 +117,15 @@ export default function Kiosk() {
       </div>
 
       <div className="consumptions-history">
-        {/* ... (mesmo histórico) */}
+        <h2>Consumo de hoje</h2>
+        <ul>
+          {consumptions.map((consumption) => (
+            <li key={consumption.id}>
+              <span>{consumption.product.name}</span>
+              <span>{new Date(consumption.created_at).toLocaleTimeString()}</span>
+            </li>
+          )).reverse()}
+        </ul>
       </div>
     </div>
   );
