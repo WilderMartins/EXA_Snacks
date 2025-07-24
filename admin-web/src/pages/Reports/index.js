@@ -42,6 +42,7 @@ export default function Reports() {
       // }));
       // setCsvData(dataForCsv);
 
+
     } catch (error) {
       console.error('Failed to load data', error);
     }
@@ -58,7 +59,6 @@ export default function Reports() {
   return (
     <div className="reports-container">
       <h1>Relatórios</h1>
-
       {/* <div className="charts-container">
         ...
       </div> */}
@@ -94,6 +94,7 @@ export default function Reports() {
             </tr>
           ))}
         </tbody>
+
       </table>
     </div>
   );
