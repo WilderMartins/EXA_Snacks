@@ -4,6 +4,7 @@ const User = require('../models/User');
 const authConfig = require('../config/auth');
 const MailService = require('../services/MailService');
 
+
 class SessionController {
   async storeOtp(req, res) {
     const { email } = req.body;
@@ -19,12 +20,14 @@ class SessionController {
 
     await user.update({ otp, otp_expires_at });
 
+
     try {
       await MailService.sendOtp(email, otp);
     } catch (error) {
       console.error('Failed to send OTP email', error);
       return res.status(500).json({ error: 'Failed to send OTP email' });
     }
+
 
     return res.status(200).send();
   }

@@ -6,6 +6,7 @@ const productsRouter = require('./products.routes');
 const consumptionsRouter = require('./consumptions.routes');
 const settingsRouter = require('./settings.routes');
 
+
 const routes = Router();
 
 routes.use('/sessions', sessionsRouter);
