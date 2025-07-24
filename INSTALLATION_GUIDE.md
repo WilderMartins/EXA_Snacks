@@ -41,7 +41,12 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     ```bash
     npm run db:start
     ```
-3.  **Inicie os servidores:**
+3.  **Configure as Variáveis de Ambiente:**
+    Copie o arquivo `.env.example` para `.env` e ajuste as variáveis conforme necessário.
+    ```bash
+    cp .env.example .env
+    ```
+4.  **Inicie os servidores:**
     Em dois terminais separados, inicie o backend e o frontend.
     ```bash
     # Terminal 1 (na raiz do projeto)
