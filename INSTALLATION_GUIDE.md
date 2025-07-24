@@ -64,3 +64,32 @@ npx sequelize-cli db:migrate
 cd admin-web
 npm install
 ```
+
+---
+
+## Solução de Problemas
+
+### `npm install` trava ou demora muito
+
+Se o comando `npm install` parecer travado (geralmente na etapa `idealTree`), pode ser um problema com o cache do npm ou com dependências antigas. Para resolver, force uma reinstalação limpa:
+
+1.  **Remova todos os `node_modules`:**
+    ```bash
+    # Na raiz do projeto
+    rm -rf node_modules
+    # No diretório do frontend
+    rm -rf admin-web/node_modules
+    ```
+
+2.  **Limpe o cache do NPM:**
+    ```bash
+    npm cache clean --force
+    ```
+
+3.  **Tente instalar novamente:**
+    ```bash
+    npm install
+    cd admin-web
+    npm install
+    ```
+
