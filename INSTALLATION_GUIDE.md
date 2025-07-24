@@ -36,7 +36,12 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     npm install html5-qrcode
     # etc.
     ```
-2.  **Inicie os servidores:**
+2.  **Inicie o Banco de Dados:**
+    Em um terminal, na raiz do projeto, inicie o contêiner do banco de dados.
+    ```bash
+    npm run db:start
+    ```
+3.  **Inicie os servidores:**
     Em dois terminais separados, inicie o backend e o frontend.
     ```bash
     # Terminal 1 (na raiz do projeto)
@@ -45,7 +50,7 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     # Terminal 2 (no diretório admin-web)
     npm start
     ```
-3.  **Acesse o Wizard:**
+4.  **Acesse o Wizard:**
     Abra seu navegador e acesse `http://localhost:3000`. Você será automaticamente redirecionado para o assistente de instalação.
 4.  **Siga os Passos:**
     - **Passo 1: Boas-vindas**: Clique em "Iniciar".
