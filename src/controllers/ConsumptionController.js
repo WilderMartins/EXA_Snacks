@@ -15,14 +15,13 @@ class ConsumptionController {
       return res.status(400).json({ error: 'Product not found' });
     }
 
-
     const user = await User.findByPk(userId);
+
     const today = new Date();
     const startOfToday = startOfDay(today);
     const endOfToday = endOfDay(today);
 
     const dailyConsumptions = await Consumption.count({
-
       where: {
         user_id: userId,
         created_at: {
@@ -31,9 +30,7 @@ class ConsumptionController {
       },
     });
 
-
     if (dailyConsumptions >= user.daily_credits) {
-
       return res.status(403).json({ error: 'Daily credit limit reached' });
     }
 
@@ -82,7 +79,6 @@ class ConsumptionController {
   async summaryByProduct(req, res) {
     // Implementação futura
     return res.json([]);
-
   }
 }
 

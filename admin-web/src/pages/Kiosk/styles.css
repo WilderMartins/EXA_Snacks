@@ -42,6 +42,35 @@
   background-color: rgba(244, 67, 54, 0.9);
 }
 
+.manual-input-container {
+  margin-top: 20px;
+}
+
+.manual-input-container form {
+  display: flex;
+  gap: 10px;
+}
+
+.manual-input-container input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.manual-input-container button {
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.manual-input-container button:disabled {
+  background-color: #ccc;
+}
+
 .consumptions-history {
   width: 100%;
   max-width: 500px;

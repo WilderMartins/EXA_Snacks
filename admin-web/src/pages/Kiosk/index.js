@@ -8,23 +8,32 @@ export default function Kiosk() {
   const [consumptions, setConsumptions] = useState([]);
   const [lastConsumed, setLastConsumed] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [manualBarcode, setManualBarcode] = useState('');
 
   const loadData = useCallback(async () => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
 
     if (!token || !user) {
-      // Lidar com o caso de não estar logado
+      // Idealmente, redirecionar para o login
       return;
     }
 
     try {
-      const [userResponse, consumptionsResponse] = await Promise.all([
-        api.get(`/users/${user.id}`, { headers: { Authorization: `Bearer ${token}` } }),
-        api.get(`/consumptions?user_id=${user.id}`, { headers: { Authorization: `Bearer ${token}` } }),
-      ]);
-      setCredits(userResponse.data.daily_credits - consumptionsResponse.data.length);
-      setConsumptions(consumptionsResponse.data);
+      const consumptionsResponse = await api.get(`/consumptions?user_id=${user.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const userResponse = await api.get(`/users/${user.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Filtra consumos para apenas hoje
+      const today = new Date().toISOString().split('T')[0];
+      const todayConsumptions = consumptionsResponse.data.filter(c => c.created_at.startsWith(today));
+
+      setCredits(userResponse.data.daily_credits - todayConsumptions.length);
+      setConsumptions(todayConsumptions);
     } catch (error) {
       console.error('Failed to load data', error);
     }
@@ -34,33 +43,35 @@ export default function Kiosk() {
     loadData();
   }, [loadData]);
 
-  const handleScan = useCallback(async (result) => {
-    if (result && !isPaused) {
-      setIsPaused(true); // Pausa o scanner para evitar leituras múltiplas
-      try {
-        const token = localStorage.getItem('token');
-        const response = await api.post(
-          '/consumptions',
-          { barcode: result.text },
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+  const processConsumption = useCallback(async (barcode) => {
+    if (!barcode || isPaused) return;
 
-        // Sucesso
-        setLastConsumed({ product: response.data.product, status: 'success' });
-        loadData(); // Recarrega os dados
-
-      } catch (error) {
-        const errorMessage = error.response?.data?.error || 'Erro desconhecido';
-        setLastConsumed({ product: { name: errorMessage }, status: 'error' });
-      } finally {
-        // Mostra o feedback por 3 segundos e depois reativa o scanner
-        setTimeout(() => {
-          setLastConsumed(null);
-          setIsPaused(false);
-        }, 3000);
-      }
+    setIsPaused(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.post(
+        '/consumptions',
+        { barcode },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setLastConsumed({ product: response.data.product, status: 'success' });
+      loadData();
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'Erro desconhecido';
+      setLastConsumed({ product: { name: errorMessage }, status: 'error' });
+    } finally {
+      setTimeout(() => {
+        setLastConsumed(null);
+        setIsPaused(false);
+      }, 3000);
     }
   }, [isPaused, loadData]);
+
+  const handleManualSubmit = (event) => {
+    event.preventDefault();
+    processConsumption(manualBarcode);
+    setManualBarcode('');
+  };
 
   return (
     <div className="kiosk-container">
@@ -71,9 +82,15 @@ export default function Kiosk() {
 
       <div className="scanner-container">
         {!isPaused && <QrReader
-          onResult={(result) => handleScan(result)}
+          onResult={(result, error) => {
+            if (!!result) {
+              processConsumption(result?.text);
+            }
+            if (!!error) {
+              // console.info(error);
+            }
+          }}
           constraints={{ facingMode: 'environment' }}
-          containerStyle={{ width: '100%' }}
         />}
 
         {lastConsumed && (
@@ -84,13 +101,28 @@ export default function Kiosk() {
         )}
       </div>
 
+      <div className="manual-input-container">
+        <form onSubmit={handleManualSubmit}>
+          <input
+            type="text"
+            placeholder="Digitar código de barras"
+            value={manualBarcode}
+            onChange={(e) => setManualBarcode(e.target.value)}
+            disabled={isPaused}
+          />
+          <button type="submit" disabled={isPaused}>
+            Registrar
+          </button>
+        </form>
+      </div>
+
       <div className="consumptions-history">
         <h2>Consumo de hoje</h2>
         <ul>
           {consumptions.map((consumption) => (
             <li key={consumption.id}>
               <span>{consumption.product.name}</span>
-              <span>{new Date(consumption.createdAt).toLocaleTimeString()}</span>
+              <span>{new Date(consumption.created_at).toLocaleTimeString()}</span>
             </li>
           )).reverse()}
         </ul>
