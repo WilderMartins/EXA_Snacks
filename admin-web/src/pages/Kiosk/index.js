@@ -9,7 +9,6 @@ export default function Kiosk() {
   const [lastConsumed, setLastConsumed] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [manualBarcode, setManualBarcode] = useState('');
-
   const processConsumption = useCallback(async (barcode) => {
     if (!barcode || isPaused) return;
 
@@ -59,6 +58,7 @@ export default function Kiosk() {
     } catch (error) {
       console.error('Failed to load data', error);
     }
+
   }, []);
 
   const processConsumption = useCallback(async (barcode) => {
