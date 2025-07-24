@@ -28,6 +28,14 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     cd admin-web
     npm install
     ```
+4.  **Se a instalação do `admin-web` falhar:**
+    Edite o arquivo `admin-web/package.json` e remova as dependências não essenciais (como `recharts`, `react-csv`). Tente o `npm install` novamente. Se funcionar, reinstale as dependências uma a uma:
+    ```bash
+    # Dentro do diretório admin-web
+    npm install react-router-dom
+    npm install react-qr-reader
+    # etc.
+    ```
 2.  **Inicie os servidores:**
     Em dois terminais separados, inicie o backend e o frontend.
     ```bash
