@@ -12,11 +12,19 @@ Este guia detalha os passos necessários para configurar e rodar o sistema de ge
 
 A maneira mais fácil de instalar o sistema é através do assistente de instalação via navegador.
 
-1.  **Clone o repositório e instale as dependências iniciais:**
+1.  **Clone o repositório:**
     ```bash
     git clone <url-do-repositorio>
     cd <nome-do-repositorio>
+    ```
+2.  **Instale as dependências do Backend:**
+    Primeiro, instale apenas as dependências do servidor.
+    ```bash
     npm install
+    ```
+3.  **Instale as dependências do Frontend:**
+    Depois que o backend estiver completo, instale as dependências do painel de administração.
+    ```bash
     cd admin-web
     npm install
     ```
@@ -92,4 +100,3 @@ Se o comando `npm install` parecer travado (geralmente na etapa `idealTree`), po
     cd admin-web
     npm install
     ```
-
