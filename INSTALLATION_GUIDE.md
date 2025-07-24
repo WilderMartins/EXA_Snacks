@@ -2,6 +2,12 @@
 
 Este guia detalha os passos necessários para configurar e rodar o sistema de gestão de snacks e bebidas.
 
+## Pré-requisitos
+
+- Node.js (versão 14 ou superior)
+- Yarn (para gerenciamento de pacotes)
+- Docker e Docker Compose (para o banco de dados PostgreSQL)
+
 ## Opção 1: Wizard de Instalação (Recomendado)
 
 A maneira mais fácil de instalar o sistema é através do assistente de instalação via navegador.
@@ -10,18 +16,18 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
     ```bash
     git clone <url-do-repositorio>
     cd <nome-do-repositorio>
-    npm install
+    yarn install
     cd admin-web
-    npm install
+    yarn install
     ```
 2.  **Inicie os servidores:**
     Em dois terminais separados, inicie o backend e o frontend.
     ```bash
     # Terminal 1 (na raiz do projeto)
-    npm run dev
+    yarn dev
 
     # Terminal 2 (no diretório admin-web)
-    npm start
+    yarn start
     ```
 3.  **Acesse o Wizard:**
     Abra seu navegador e acesse `http://localhost:3000`. Você será automaticamente redirecionado para o assistente de instalação.
@@ -39,42 +45,23 @@ A maneira mais fácil de instalar o sistema é através do assistente de instala
 ```bash
 git clone <url-do-repositorio>
 cd <nome-do-repositorio>
-npm install
+yarn install
 ```
 
 #### 1.2. Configure o Banco de Dados com Docker
-(Esta seção permanece a mesma da versão anterior do guia)
+(Esta seção permanece a mesma)
 
 #### 1.3. Configure as Variáveis de Ambiente
-1.  Na raiz do projeto, crie um arquivo `.env`.
-2.  Adicione as seguintes variáveis:
-    ```env
-    DB_HOST=localhost
-    DB_PORT=5432
-    DB_USER=postgres
-    DB_PASSWORD=docker
-    DB_NAME=snacks
-    APP_SECRET=your-super-secret-key
-    ```
+(Esta seção permanece a mesma)
 
 #### 1.4. Rode as Migrações
-**Importante**: Antes de rodar as migrações, o backend precisa ter se conectado ao banco pelo menos uma vez. Inicie o servidor, deixe-o conectar, e então rode as migrações.
-
 ```bash
-npx sequelize-cli db:migrate
+yarn sequelize-cli db:migrate
 ```
-
-#### 1.5. Crie o primeiro usuário (via `psql` ou outra ferramenta)
-```sql
-INSERT INTO users (name, email, role, created_at, updated_at) VALUES ('Admin', 'admin@example.com', 'admin', NOW(), NOW());
-```
-
-#### 1.6. Crie o arquivo de "trava"
-Crie um arquivo vazio chamado `setup.lock` dentro do diretório `src/config/`.
-```bash
-touch src/config/setup.lock
-```
+(Nota: `yarn sequelize-cli` funciona se você tiver o `sequelize-cli` como uma dependência de desenvolvimento)
 
 ### 2. Configuração do Frontend
-(Esta seção permanece a mesma da versão anterior do guia)
-
+```bash
+cd admin-web
+yarn install
+```
