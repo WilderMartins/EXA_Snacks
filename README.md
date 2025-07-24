@@ -28,7 +28,33 @@ Este é um sistema completo para gerenciar o consumo de snacks e bebidas por col
 
 ## Instalação
 
-A instalação do sistema é simplificada através de um **assistente de instalação via navegador**. Para instruções detalhadas, consulte o [Guia de Instalação](INSTALLATION_GUIDE.md).
+Para instruções detalhadas de instalação, consulte o [Guia de Instalação](INSTALLATION_GUIDE.md).
+
+### Resumo da Instalação
+
+1. **Clone o repositório.**
+2. **Instale as dependências:**
+   ```bash
+   npm install
+   cd admin-web
+   npm install
+   ```
+3. **Inicie o banco de dados:**
+   ```bash
+   npm run db:start
+   ```
+4. **Configure as variáveis de ambiente:**
+   ```bash
+   cp .env.example .env
+   ```
+5. **Inicie os servidores:**
+   ```bash
+   # Em um terminal
+   npm run dev
+
+   # Em outro terminal, no diretório admin-web
+   npm start
+   ```
 
 ## Documentação da API
 
