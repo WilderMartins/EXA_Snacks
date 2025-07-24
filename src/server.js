@@ -3,6 +3,7 @@ const cors = require('cors');
 const routes = require('./routes');
 
 require('./database');
+require('./scheduler');
 
 const app = express();
 

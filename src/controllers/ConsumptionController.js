@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { startOfDay, endOfDay } = require('date-fns');
+const { startOfDay, endOfDay, parseISO } = require('date-fns');
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Consumption = require('../models/Consumption');
@@ -15,15 +15,14 @@ class ConsumptionController {
       return res.status(400).json({ error: 'Product not found' });
     }
 
-    const user = await User.findByPk(userId, {
-      include: { association: 'consumptions' },
-    });
 
+    const user = await User.findByPk(userId);
     const today = new Date();
     const startOfToday = startOfDay(today);
     const endOfToday = endOfDay(today);
 
-    const dailyConsumptions = await Consumption.findAll({
+    const dailyConsumptions = await Consumption.count({
+
       where: {
         user_id: userId,
         created_at: {
@@ -32,7 +31,9 @@ class ConsumptionController {
       },
     });
 
-    if (dailyConsumptions.length >= user.daily_credits) {
+
+    if (dailyConsumptions >= user.daily_credits) {
+
       return res.status(403).json({ error: 'Daily credit limit reached' });
     }
 
@@ -41,7 +42,47 @@ class ConsumptionController {
       product_id: product.id,
     });
 
-    return res.json(consumption);
+    const consumptionWithProduct = await Consumption.findByPk(consumption.id, { include: { model: Product, as: 'product' } });
+
+    return res.json(consumptionWithProduct);
+  }
+
+  async index(req, res) {
+    const { user_id, start_date, end_date } = req.query;
+
+    const where = {};
+
+    if (user_id) {
+      where.user_id = user_id;
+    }
+
+    if (start_date && end_date) {
+      where.created_at = {
+        [Op.between]: [parseISO(start_date), parseISO(end_date)],
+      };
+    }
+
+    const consumptions = await Consumption.findAll({
+      where,
+      include: [
+        { model: User, as: 'user', attributes: ['id', 'name', 'email'] },
+        { model: Product, as: 'product', attributes: ['id', 'name', 'barcode'] },
+      ],
+      order: [['created_at', 'DESC']],
+    });
+
+    return res.json(consumptions);
+  }
+
+  async summaryByUser(req, res) {
+    // Implementação futura
+    return res.json([]);
+  }
+
+  async summaryByProduct(req, res) {
+    // Implementação futura
+    return res.json([]);
+
   }
 }
 

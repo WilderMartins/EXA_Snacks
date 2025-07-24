@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const { addMinutes } = require('date-fns');
 const User = require('../models/User');
 const authConfig = require('../config/auth');
+const MailService = require('../services/MailService');
+
 
 class SessionController {
   async storeOtp(req, res) {
@@ -18,8 +20,14 @@ class SessionController {
 
     await user.update({ otp, otp_expires_at });
 
-    // Em um aplicativo real, você enviaria o OTP por e-mail aqui.
-    console.log(`OTP for ${email}: ${otp}`);
+
+    try {
+      await MailService.sendOtp(email, otp);
+    } catch (error) {
+      console.error('Failed to send OTP email', error);
+      return res.status(500).json({ error: 'Failed to send OTP email' });
+    }
+
 
     return res.status(200).send();
   }

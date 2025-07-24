@@ -19,6 +19,12 @@ export default function Layout({ children }) {
           <li>
             <Link to="/kiosk">Quiosque</Link>
           </li>
+          <li>
+            <Link to="/reports">Relatórios</Link>
+          </li>
+          <li>
+            <Link to="/settings">Configurações</Link>
+          </li>
         </ul>
       </nav>
       <main className="content">{children}</main>
