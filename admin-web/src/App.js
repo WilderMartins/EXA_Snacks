@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import api from './services/api';
 import Routes from './routes';
 import SetupWizard from './pages/Setup';
+import Layout from './components/Layout';
 
 function AppLoader() {
   const [isSetupComplete, setIsSetupComplete] = useState(null);
@@ -23,7 +25,7 @@ function AppLoader() {
     return <div>Carregando...</div>;
   }
 
-  return isSetupComplete ? <Routes /> : <SetupWizard />;
+  return isSetupComplete ? <Routes /> : <BrowserRouter><Layout><SetupWizard /></Layout></BrowserRouter>;
 }
 
 function App() {
