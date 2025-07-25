@@ -42,7 +42,7 @@ class ConsumptionController {
 
     const consumptionWithProduct = await Consumption.findByPk(consumption.id, { include: { model: Product, as: 'product' } });
 
-    return res.json(consumptionWithProduct);
+    return res.status(201).json(consumptionWithProduct);
   }
 
   // ... (método index permanece o mesmo)
@@ -104,6 +104,41 @@ class ConsumptionController {
       order: [[literal('total_consumed'), 'DESC']],
     });
     return res.json(summary);
+  }
+
+  async summary(req, res) {
+    // Daily consumption for the last 7 days
+    const dailyConsumptions = await Consumption.findAll({
+      attributes: [
+        [fn('date_trunc', 'day', col('created_at')), 'date'],
+        [fn('COUNT', 'id'), 'count'],
+      ],
+      where: {
+        created_at: {
+          [Op.gte]: new Date(new Date() - 7 * 24 * 60 * 60 * 1000),
+        },
+      },
+      group: ['date'],
+      order: [['date', 'ASC']],
+    });
+
+    // Consumption by product category
+    const categoryConsumptions = await Consumption.findAll({
+      attributes: [
+        [fn('COUNT', 'product.id'), 'count'],
+      ],
+      include: [{
+        model: Product,
+        as: 'product',
+        attributes: ['category'],
+      }],
+      group: ['product.category'],
+    });
+
+    return res.json({
+      dailyConsumptions,
+      categoryConsumptions,
+    });
   }
 }
 

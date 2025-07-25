@@ -9,29 +9,6 @@ export default function Kiosk() {
   const [lastConsumed, setLastConsumed] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
   const [manualBarcode, setManualBarcode] = useState('');
-  const processConsumption = useCallback(async (barcode) => {
-    if (!barcode || isPaused) return;
-
-    setIsPaused(true);
-    try {
-      const token = localStorage.getItem('token');
-      const response = await api.post(
-        '/consumptions',
-        { barcode },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setLastConsumed({ product: response.data.product, status: 'success' });
-      loadData();
-    } catch (error) {
-      const errorMessage = error.response?.data?.error || 'Erro desconhecido';
-      setLastConsumed({ product: { name: errorMessage }, status: 'error' });
-    } finally {
-      setTimeout(() => {
-        setLastConsumed(null);
-        setIsPaused(false);
-      }, 3000);
-    }
-  }, [isPaused, loadData]);
 
   const loadData = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -60,6 +37,41 @@ export default function Kiosk() {
     }
 
   }, []);
+
+  const processConsumption = useCallback(async (barcode) => {
+    if (!barcode || isPaused) return;
+
+    setIsPaused(true);
+    try {
+      const token = localStorage.getItem('token');
+      const response = await api.post(
+        '/consumptions',
+        { barcode },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setLastConsumed({ product: response.data.product, status: 'success' });
+      loadData();
+    } catch (error) {
+      let errorMessage = 'Ocorreu um erro.';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.error || 'Erro desconhecido do servidor.';
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
+      setLastConsumed({ product: { name: errorMessage }, status: 'error' });
+    } finally {
+      setTimeout(() => {
+        setLastConsumed(null);
+        setIsPaused(false);
+      }, 3000);
+    }
+  }, [isPaused, loadData]);
 
   useEffect(() => {
     loadData();
