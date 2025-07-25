@@ -8,6 +8,7 @@ class Product extends Model {
         barcode: DataTypes.STRING,
         image_url: DataTypes.STRING,
         category: DataTypes.STRING,
+        price: DataTypes.DECIMAL,
       },
       {
         sequelize,
