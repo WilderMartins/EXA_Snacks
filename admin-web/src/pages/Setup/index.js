@@ -49,7 +49,7 @@ const Step2Database = ({ onNext }) => {
 };
 
 const Step3Admin = ({ onNext }) => {
-    const [formData, setFormData] = useState({ name: '', email: '' });
+    const [formData, setFormData] = useState({ name: '', email: '', password: '' });
     const [error, setError] = useState('');
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -72,6 +72,7 @@ const Step3Admin = ({ onNext }) => {
           <form onSubmit={handleSubmit}>
             <input name="name" placeholder="Nome Completo" onChange={handleChange} />
             <input name="email" type="email" placeholder="E-mail" onChange={handleChange} />
+            <input name="password" type="password" placeholder="Senha" onChange={handleChange} />
             <button type="submit">Criar Administrador</button>
           </form>
         </div>
