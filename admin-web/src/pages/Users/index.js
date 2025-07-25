@@ -20,49 +20,19 @@ export default function Users() {
   }, []);
 
 
+  const loadUsers = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    const response = await api.get('/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setUsers(response.data);
+  }, []);
+
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser({ ...newUser, [name]: value });
-  };
-
-  const handleManualSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    try {
-      await api.post('/users', newUser, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert('Usuário criado com sucesso!');
-      loadUsers();
-      setNewUser({ name: '', email: '', password: '' });
-    } catch (error) {
-      alert('Falha ao criar o usuário.');
-    }
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewUser({ ...newUser, [name]: value });
-  };
-
-  const handleManualSubmit = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem('token');
-    try {
-      await api.post('/users', newUser, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      alert('Usuário criado com sucesso!');
-      loadUsers();
-      setNewUser({ name: '', email: '', password: '' });
-    } catch (error) {
-      alert('Falha ao criar o usuário.');
-    }
-  };
 
   return (
     <div className="users-container">
