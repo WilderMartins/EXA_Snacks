@@ -57,10 +57,12 @@ const Step3Admin = ({ onNext }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        console.log('Submitting admin data:', formData);
         try {
             await api.post('/setup/admin', formData);
             onNext();
         } catch (err) {
+            console.error('Error creating admin:', err);
             setError(err.response?.data?.error || 'Erro desconhecido.');
         }
     };
