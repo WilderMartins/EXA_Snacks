@@ -56,6 +56,16 @@ Para instruções detalhadas de instalação, consulte o [Guia de Instalação](
    npm start
    ```
 
+## Testes
+
+Para executar os testes, use o seguinte comando:
+
+```bash
+npm test
+```
+
+**Nota:** Os testes são executados sequencialmente para evitar problemas de condição de corrida.
+
 ## Documentação da API
 
 Para detalhes sobre os endpoints da API, consulte a [Documentação da API](API_DOCUMENTATION.md).
@@ -65,4 +75,3 @@ Para detalhes sobre os endpoints da API, consulte a [Documentação da API](API_
 - [ ] Implementar o reset diário de créditos no backend.
 - [ ] Adicionar gráficos e mais filtros aos relatórios.
 - [ ] Desenvolver um aplicativo nativo para Android/iOS.
-- [ ] Escrever testes automatizados (unitários e de integração).

@@ -4,6 +4,24 @@ class Consumption extends Model {
   static init(sequelize) {
     super.init(
       {
+        user_id: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'Users',
+            key: 'id',
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        },
+        product_id: {
+          type: DataTypes.INTEGER,
+          references: {
+            model: 'Products',
+            key: 'id',
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
+        },
         credits_used: DataTypes.INTEGER,
       },
       {

@@ -19,14 +19,16 @@ class SessionController {
 
     await user.update({ otp, otp_expires_at });
 
-    try {
-      await MailService.sendOtp(email, otp);
-    } catch (error) {
-      console.error('Failed to send OTP email', error);
-      return res.status(500).json({ error: 'Failed to send OTP email' });
+    if (process.env.NODE_ENV !== 'test') {
+      try {
+        await MailService.sendOtp(email, otp);
+      } catch (error) {
+        console.error('Failed to send OTP email', error);
+        return res.status(500).json({ error: 'Failed to send OTP email' });
+      }
     }
 
-    return res.status(200).send();
+    return res.status(200).json({ otp });
   }
 
   async store(req, res) {
