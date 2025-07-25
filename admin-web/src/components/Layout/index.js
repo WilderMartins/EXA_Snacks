@@ -5,6 +5,8 @@ import './styles.css';
 
 export default function Layout({ children }) {
   const [sidebarColor, setSidebarColor] = useState('#f0f0f0');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 
   useEffect(() => {
     async function loadSettings() {
@@ -22,11 +24,14 @@ export default function Layout({ children }) {
 
   return (
     <div className="layout-container">
-      <nav className="sidebar" style={{ backgroundColor: sidebarColor }}>
+      <nav className={`sidebar ${isMenuOpen ? 'open' : ''}`} style={{ backgroundColor: sidebarColor }}>
         <div className="logo-container">
           <img src="/logo.png" alt="Logo" />
         </div>
-        <ul>
+        <button className="hamburger" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          &#9776;
+        </button>
+        <ul className={isMenuOpen ? 'open' : ''}>
           <li>
             <Link to="/dashboard">Dashboard</Link>
           </li>
@@ -35,6 +40,9 @@ export default function Layout({ children }) {
           </li>
           <li>
             <Link to="/products">Produtos</Link>
+          </li>
+          <li>
+            <Link to="/categories">Categorias</Link>
           </li>
           <li>
             <Link to="/kiosk">Quiosque</Link>

@@ -10,6 +10,7 @@ import Products from './pages/Products';
 import Kiosk from './pages/Kiosk';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import Categories from './pages/Categories';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -36,6 +37,7 @@ const Routes = () => (
       <PrivateRoute path="/kiosk" component={Kiosk} />
       <PrivateRoute path="/reports" component={Reports} />
       <PrivateRoute path="/settings" component={Settings} />
+      <PrivateRoute path="/categories" component={Categories} />
       <Route path="*" component={() => <h1>Page not found</h1>} />
     </Switch>
   </BrowserRouter>

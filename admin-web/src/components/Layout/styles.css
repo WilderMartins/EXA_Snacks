@@ -47,7 +47,8 @@
     width: 100%;
     height: auto;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    background: #333;
   }
 
   .sidebar ul {
@@ -56,5 +57,38 @@
 
   .sidebar ul li {
     margin: 0 10px;
+  }
+
+  .sidebar ul li a {
+    color: white;
+  }
+
+  .hamburger {
+    display: none;
+  }
+
+  @media (max-width: 480px) {
+    .sidebar ul {
+      display: none;
+    }
+
+    .sidebar ul.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background: #333;
+    }
+
+    .hamburger {
+      display: block;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
   }
 }

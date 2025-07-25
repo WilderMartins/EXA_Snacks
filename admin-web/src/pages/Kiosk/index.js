@@ -52,7 +52,18 @@ export default function Kiosk() {
       setLastConsumed({ product: response.data.product, status: 'success' });
       loadData();
     } catch (error) {
-      const errorMessage = error.response?.data?.error || 'Erro desconhecido';
+      let errorMessage = 'Ocorreu um erro.';
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        errorMessage = error.response.data.error || 'Erro desconhecido do servidor.';
+      } else if (error.request) {
+        // The request was made but no response was received
+        errorMessage = 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.';
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        errorMessage = error.message;
+      }
       setLastConsumed({ product: { name: errorMessage }, status: 'error' });
     } finally {
       setTimeout(() => {
