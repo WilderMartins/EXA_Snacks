@@ -37,7 +37,11 @@ const Step2Database = ({ onNext }) => {
       <h2>Passo 2: Configuração do Banco de Dados</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        {/* Inputs para cada campo do formData */}
+        <input name="db_host" value={formData.db_host} onChange={e => setFormData({ ...formData, db_host: e.target.value })} placeholder="Host do Banco" />
+        <input name="db_port" value={formData.db_port} onChange={e => setFormData({ ...formData, db_port: e.target.value })} placeholder="Porta" />
+        <input name="db_user" value={formData.db_user} onChange={e => setFormData({ ...formData, db_user: e.target.value })} placeholder="Usuário" />
+        <input name="db_password" type="password" value={formData.db_password} onChange={e => setFormData({ ...formData, db_password: e.target.value })} placeholder="Senha" />
+        <input name="db_name" value={formData.db_name} onChange={e => setFormData({ ...formData, db_name: e.target.value })} placeholder="Nome do Banco" />
         <button type="submit">Testar e Salvar</button>
       </form>
     </div>
