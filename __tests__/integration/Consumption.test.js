@@ -13,6 +13,7 @@ describe('Consumption Controller', () => {
       email: 'admin@example.com',
       role: 'admin',
       is_active: true,
+      daily_credits: 10,
     });
 
     const otpResponse = await request(app)
