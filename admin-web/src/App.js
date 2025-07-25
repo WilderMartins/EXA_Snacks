@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import api from './services/api';
 import Routes from './routes';
 import SetupWizard from './pages/Setup';
