@@ -56,6 +56,11 @@ npm test
     ```bash
     cp .env.example .env
     ```
+4.  **Rode as Migrações:**
+    Antes de iniciar os servidores, rode as migrações para garantir que o banco de dados está atualizado.
+    ```bash
+    npx sequelize-cli db:migrate
+    ```
 4.  **Inicie os servidores:**
     Em dois terminais separados, inicie o backend e o frontend.
     ```bash

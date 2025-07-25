@@ -4,10 +4,10 @@ Este é um sistema completo para gerenciar o consumo de snacks e bebidas por col
 
 ## Funcionalidades
 
-- **Autenticação Segura**: Login sem senha utilizando OTP (One-Time Password) enviado por e-mail.
+- **Autenticação Segura**: Login com senha ou sem senha utilizando OTP (One-Time Password) enviado por e-mail.
 - **Painel de Administração Web**:
-    - Gestão de usuários (colaboradores).
-    - Gestão de produtos (snacks, bebidas, etc.).
+    - Gestão de usuários (colaboradores), com opção de criação manual.
+    - Gestão de produtos (snacks, bebidas, etc.), com opção de criação manual e importação via CSV.
     - Configuração de serviços externos (AWS SES para envio de e-mails).
     - Relatórios de consumo detalhados com opção de exportação para CSV.
 - **Interface de Quiosque**:

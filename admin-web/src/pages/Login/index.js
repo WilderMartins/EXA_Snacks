@@ -4,57 +4,69 @@ import { login } from '../../services/auth';
 
 export default function Login({ history }) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [otp, setOtp] = useState('');
-  const [step, setStep] = useState(1);
+  const [loginMethod, setLoginMethod] = useState('password'); // 'password' or 'otp'
+  const [otpSent, setOtpSent] = useState(false);
 
-  async function handleEmailSubmit(event) {
+  async function handleLogin(event) {
+    event.preventDefault();
+    try {
+      const payload = loginMethod === 'password' ? { email, password } : { email, otp };
+      const response = await api.post('/sessions', payload);
+      const { token, user } = response.data;
+      login(token, user);
+      history.push('/kiosk');
+    } catch (error) {
+      alert('Falha no login, verifique suas credenciais.');
+    }
+  }
+
+  async function handleRequestOtp(event) {
     event.preventDefault();
     try {
       await api.post('/sessions/otp', { email });
-      setStep(2);
+      setOtpSent(true);
+      alert('Código OTP enviado para o seu e-mail.');
     } catch (error) {
       alert('Falha ao solicitar OTP, verifique o e-mail e tente novamente.');
     }
   }
 
-  async function handleOtpSubmit(event) {
-    event.preventDefault();
-    try {
-      const response = await api.post('/sessions', { email, otp });
-      const { token, user } = response.data;
-      login(token, user);
-      history.push('/kiosk');
-    } catch (error) {
-      alert('Falha no login, OTP inválido ou expirado.');
-    }
-  }
-
   return (
     <div className="login-container">
-      {step === 1 ? (
-        <form onSubmit={handleEmailSubmit}>
-          <h2>Acesse o quiosque</h2>
+      <form onSubmit={handleLogin}>
+        <h2>Acesse o quiosque</h2>
+        <input
+          type="email"
+          placeholder="Seu e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {loginMethod === 'password' ? (
           <input
-            type="email"
-            placeholder="Seu e-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="password"
+            placeholder="Sua senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <button type="submit">Receber código</button>
-        </form>
-      ) : (
-        <form onSubmit={handleOtpSubmit}>
-          <h2>Digite o código</h2>
-          <p>Enviamos um código para {email}</p>
+        ) : (
           <input
             type="text"
-            placeholder="Seu código"
+            placeholder="Seu código OTP"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
           />
-          <button type="submit">Entrar</button>
-        </form>
-      )}
+        )}
+        <button type="submit">Entrar</button>
+      </form>
+      <div className="login-options">
+        <button onClick={() => setLoginMethod('password')}>Usar senha</button>
+        <button onClick={() => setLoginMethod('otp')}>Usar OTP</button>
+        {loginMethod === 'otp' && !otpSent && (
+          <button onClick={handleRequestOtp}>Enviar OTP</button>
+        )}
+      </div>
     </div>
   );
 }
