@@ -56,6 +56,34 @@ class ProductController {
 
     return res.status(204).send();
   }
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const product = await Product.findByPk(id);
+
+    if (!product) {
+      return res.status(400).json({ error: 'Product not found' });
+    }
+
+    await product.destroy();
+
+    return res.status(204).send();
+  }
+
+  async update(req, res) {
+    const { id } = req.params;
+    const { name, barcode, category, image_url } = req.body;
+
+    const product = await Product.findByPk(id);
+
+    if (!product) {
+      return res.status(400).json({ error: 'Product not found' });
+    }
+
+    await product.update({ name, barcode, category, image_url });
+
+    return res.json(product);
+  }
 }
 
 module.exports = new ProductController();

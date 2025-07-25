@@ -6,6 +6,7 @@ export default function Settings() {
   const [awsSecretAccessKey, setAwsSecretAccessKey] = useState('');
   const [awsRegion, setAwsRegion] = useState('');
   const [mailFrom, setMailFrom] = useState('');
+  const [sidebarColor, setSidebarColor] = useState('#f0f0f0');
 
   useEffect(() => {
     console.log('Settings component mounted');
@@ -17,11 +18,12 @@ export default function Settings() {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log('Settings loaded:', response.data);
-        const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from } = response.data;
+        const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from, sidebar_color } = response.data;
         setAwsAccessKeyId(aws_access_key_id || '');
         setAwsSecretAccessKey(aws_secret_access_key || '');
         setAwsRegion(aws_region || '');
         setMailFrom(mail_from || '');
+        setSidebarColor(sidebar_color || '#f0f0f0');
       } catch (error) {
         console.error('Failed to load settings', error);
       }
@@ -38,6 +40,7 @@ export default function Settings() {
       aws_secret_access_key: awsSecretAccessKey,
       aws_region: awsRegion,
       mail_from: mailFrom,
+      sidebar_color: sidebarColor,
     };
     console.log('Settings data:', settingsData);
     try {
@@ -76,6 +79,13 @@ export default function Settings() {
           placeholder="E-mail de origem"
           value={mailFrom}
           onChange={(e) => setMailFrom(e.target.value)}
+        />
+        <label htmlFor="sidebarColor">Cor da Barra Lateral:</label>
+        <input
+          type="color"
+          id="sidebarColor"
+          value={sidebarColor}
+          onChange={(e) => setSidebarColor(e.target.value)}
         />
         <button type="submit">Salvar</button>
       </form>

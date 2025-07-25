@@ -17,11 +17,11 @@ class SettingsController {
   }
 
   async store(req, res) {
-    const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from } = req.body;
+    const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from, sidebar_color } = req.body;
     try {
       await fs.writeFile(
         settingsFilePath,
-        JSON.stringify({ aws_access_key_id, aws_secret_access_key, aws_region, mail_from }, null, 2)
+        JSON.stringify({ aws_access_key_id, aws_secret_access_key, aws_region, mail_from, sidebar_color }, null, 2)
       );
       return res.status(200).send();
     } catch (error) {

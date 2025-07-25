@@ -12,5 +12,6 @@ consumptionsRouter.get('/', ConsumptionController.index);
 
 consumptionsRouter.get('/summary/by-user', adminMiddleware, ConsumptionController.summaryByUser);
 consumptionsRouter.get('/summary/by-product', adminMiddleware, ConsumptionController.summaryByProduct);
+consumptionsRouter.get('/summary', adminMiddleware, ConsumptionController.summary);
 
 module.exports = consumptionsRouter;
