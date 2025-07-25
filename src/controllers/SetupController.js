@@ -56,11 +56,6 @@ APP_SECRET=${require('crypto').randomBytes(16).toString('hex')}
   async setupAdmin(req, res) {
     const { name, email, password } = req.body;
     try {
-      const adminCount = await User.count({ where: { role: 'admin' } });
-      if (adminCount > 0) {
-        return res.status(400).json({ error: 'Um administrador já existe.' });
-      }
-
       await User.create({ name, email, password, role: 'admin', is_active: true });
       return res.status(201).send();
     } catch (error) {
