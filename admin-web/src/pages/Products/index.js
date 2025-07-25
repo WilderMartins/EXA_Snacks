@@ -10,6 +10,7 @@ export default function Products() {
     category: '',
     image_url: '',
   });
+  const [editingProduct, setEditingProduct] = useState(null);
 
   const loadProducts = useCallback(async () => {
     const token = localStorage.getItem('token');
@@ -75,6 +76,38 @@ export default function Products() {
     }
   };
 
+  const handleDelete = async (productId) => {
+    const token = localStorage.getItem('token');
+    try {
+      await api.delete(`/products/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert('Produto excluído com sucesso!');
+      loadProducts();
+    } catch (error) {
+      alert('Falha ao excluir o produto.');
+    }
+  };
+
+  const handleEdit = (product) => {
+    setEditingProduct(product);
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    try {
+      await api.put(`/products/${editingProduct.id}`, editingProduct, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert('Produto atualizado com sucesso!');
+      loadProducts();
+      setEditingProduct(null);
+    } catch (error) {
+      alert('Falha ao atualizar o produto.');
+    }
+  };
+
   return (
     <div className="products-container">
       <h1>Gestão de Produtos</h1>
@@ -124,10 +157,65 @@ export default function Products() {
             <li key={product.id}>
               <strong>{product.name}</strong>
               <span>{product.barcode}</span>
+              <div className="product-actions">
+                <button onClick={() => handleEdit(product)}>Editar</button>
+                <button onClick={() => handleDelete(product.id)}>Excluir</button>
+              </div>
             </li>
           ))}
         </ul>
       </div>
+
+      {editingProduct && (
+        <div className="edit-modal">
+          <form onSubmit={handleUpdate}>
+            <h2>Editar Produto</h2>
+            <input
+              name="name"
+              value={editingProduct.name}
+              onChange={(e) =>
+                setEditingProduct({ ...editingProduct, name: e.target.value })
+              }
+              placeholder="Nome do Produto"
+            />
+            <input
+              name="barcode"
+              value={editingProduct.barcode}
+              onChange={(e) =>
+                setEditingProduct({
+                  ...editingProduct,
+                  barcode: e.target.value,
+                })
+              }
+              placeholder="Código de Barras"
+            />
+            <input
+              name="category"
+              value={editingProduct.category}
+              onChange={(e) =>
+                setEditingProduct({
+                  ...editingProduct,
+                  category: e.target.value,
+                })
+              }
+              placeholder="Categoria"
+            />
+            <input
+              name="image_url"
+              value={editingProduct.image_url}
+              onChange={(e) =>
+                setEditingProduct({
+                  ...editingProduct,
+                  image_url: e.target.value,
+                })
+              }
+              placeholder="URL da Imagem"
+            />
+            <button type="submit">Salvar</button>
+            <button onClick={() => setEditingProduct(null)}>Cancelar</button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

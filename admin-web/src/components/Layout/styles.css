@@ -1,3 +1,13 @@
+.logo-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.logo-container img {
+  max-width: 100%;
+  height: auto;
+}
+
 .layout-container {
   display: flex;
   min-height: 100vh;

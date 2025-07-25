@@ -11,7 +11,7 @@ class User extends Model {
         otp: DataTypes.STRING,
         otp_expires_at: DataTypes.DATE,
         daily_credits: DataTypes.INTEGER,
-        role: DataTypes.ENUM('admin', 'user'),
+        role: DataTypes.ENUM('admin', 'manager', 'user'),
         is_active: DataTypes.BOOLEAN,
       },
       {

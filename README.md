@@ -6,10 +6,13 @@ Este é um sistema completo para gerenciar o consumo de snacks e bebidas por col
 
 - **Autenticação Segura**: Login com senha ou sem senha utilizando OTP (One-Time Password) enviado por e-mail.
 - **Painel de Administração Web**:
-    - Gestão de usuários (colaboradores), com opção de criação manual.
-    - Gestão de produtos (snacks, bebidas, etc.), com opção de criação manual e importação via CSV.
-    - Configuração de serviços externos (AWS SES para envio de e-mails).
+    - Gestão de usuários (colaboradores), com opção de criação, edição e exclusão manual.
+    - Gestão de produtos (snacks, bebidas, etc.), com opção de criação, edição e exclusão manual e importação via CSV.
+    - Configuração de layout (cor da barra lateral) e serviços externos (AWS SES para envio de e-mails).
+    - Dashboard com gráficos de consumo diário e por categoria.
     - Relatórios de consumo detalhados com opção de exportação para CSV.
+- **RBAC (Controle de Acesso Baseado em Função)**:
+    - Criação de usuários com as funções de `Admin`, `Manager` e `User`.
 - **Interface de Quiosque**:
     - Otimizada para tablets e uso de baixa fricção.
     - Escaneamento de código de barras de produtos usando a câmera do dispositivo.

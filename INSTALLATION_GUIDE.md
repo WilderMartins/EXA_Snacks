@@ -57,7 +57,7 @@ npm test
     cp .env.example .env
     ```
 4.  **Rode as Migrações:**
-    Antes de iniciar os servidores, rode as migrações para garantir que o banco de dados está atualizado.
+    Antes de iniciar os servidores, rode as migrações para garantir que o banco de dados está atualizado. Se você estiver atualizando de uma versão anterior, este passo é crucial.
     ```bash
     npx sequelize-cli db:migrate
     ```
