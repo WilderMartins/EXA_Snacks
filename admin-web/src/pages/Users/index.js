@@ -9,18 +9,19 @@ export default function Users() {
     password: '',
   });
 
-  useEffect(() => {
-    async function loadUsers() {
-      const token = localStorage.getItem('token');
-      const response = await api.get('/users', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUsers(response.data);
-    }
-    loadUsers();
+  const loadUsers = useCallback(async () => {
+    const token = localStorage.getItem('token');
+    const response = await api.get('/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setUsers(response.data);
   }, []);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
