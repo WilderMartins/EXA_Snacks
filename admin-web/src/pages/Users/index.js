@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
 
 export default function Users() {
@@ -19,20 +19,29 @@ export default function Users() {
     setUsers(response.data);
   }, []);
 
-
-  const loadUsers = useCallback(async () => {
-    const token = localStorage.getItem('token');
-    const response = await api.get('/users', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setUsers(response.data);
-  }, []);
-
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser({ ...newUser, [name]: value });
+  };
+
+  const handleManualSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    try {
+      await api.post('/users', newUser, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      alert('Usuário criado com sucesso!');
+      loadUsers();
+      setNewUser({ name: '', email: '', password: '' });
+    } catch (error) {
+      alert('Falha ao criar o usuário.');
+    }
+  };
 
   return (
     <div className="users-container">
