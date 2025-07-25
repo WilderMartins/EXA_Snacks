@@ -8,12 +8,15 @@ export default function Settings() {
   const [mailFrom, setMailFrom] = useState('');
 
   useEffect(() => {
+    console.log('Settings component mounted');
     async function loadSettings() {
+      console.log('Loading settings...');
       const token = localStorage.getItem('token');
       try {
         const response = await api.get('/settings', {
           headers: { Authorization: `Bearer ${token}` },
         });
+        console.log('Settings loaded:', response.data);
         const { aws_access_key_id, aws_secret_access_key, aws_region, mail_from } = response.data;
         setAwsAccessKeyId(aws_access_key_id || '');
         setAwsSecretAccessKey(aws_secret_access_key || '');
@@ -28,20 +31,22 @@ export default function Settings() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    console.log('Submitting settings...');
     const token = localStorage.getItem('token');
+    const settingsData = {
+      aws_access_key_id: awsAccessKeyId,
+      aws_secret_access_key: awsSecretAccessKey,
+      aws_region: awsRegion,
+      mail_from: mailFrom,
+    };
+    console.log('Settings data:', settingsData);
     try {
-      await api.post(
-        '/settings',
-        {
-          aws_access_key_id: awsAccessKeyId,
-          aws_secret_access_key: awsSecretAccessKey,
-          aws_region: awsRegion,
-          mail_from: mailFrom,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post('/settings', settingsData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert('Configurações salvas com sucesso!');
     } catch (error) {
+      console.error('Failed to save settings:', error);
       alert('Falha ao salvar as configurações.');
     }
   }
