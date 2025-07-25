@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import api from './services/api';
 import Routes from './routes';
 import SetupWizard from './pages/Setup';
@@ -24,7 +25,7 @@ function AppLoader() {
     return <div>Carregando...</div>;
   }
 
-  return isSetupComplete ? <Routes /> : <Layout><SetupWizard /></Layout>;
+  return isSetupComplete ? <Routes /> : <BrowserRouter><Layout><SetupWizard /></Layout></BrowserRouter>;
 }
 
 function App() {
