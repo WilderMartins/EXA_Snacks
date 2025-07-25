@@ -42,7 +42,7 @@ class ConsumptionController {
 
     const consumptionWithProduct = await Consumption.findByPk(consumption.id, { include: { model: Product, as: 'product' } });
 
-    return res.json(consumptionWithProduct);
+    return res.status(201).json(consumptionWithProduct);
   }
 
   // ... (método index permanece o mesmo)
