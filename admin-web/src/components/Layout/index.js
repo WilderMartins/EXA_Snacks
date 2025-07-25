@@ -7,6 +7,7 @@ export default function Layout({ children }) {
   const [sidebarColor, setSidebarColor] = useState('#f0f0f0');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
   useEffect(() => {
     async function loadSettings() {
       try {
